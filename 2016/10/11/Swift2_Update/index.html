@@ -6,12 +6,40 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>凌云壮志几多愁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
+  <meta name="description" content="1.我感觉Swift2.0最大改进就是减少金字塔写法（就是那种if里面再套一个if然后再套一个if很丑的代码），对于Swift1.2中的很多optional都进行确定值，使用guard和if let 可以减少一些那种金字塔的写法。
+1).使用guard
+
+guard a &amp;gt; 10 else{ return }
+
+2).使用传统的if
+
+if a &amp;gt; 10{  } 
+2.对于什么时候使用">
+<meta property="og:type" content="article">
 <meta property="og:title" content="凌云壮志几多愁">
-<meta property="og:url" content="https://wangwillgood.github.io/index.html">
+<meta property="og:url" content="https://wangwillgood.github.io/2016/10/11/Swift2_Update/index.html">
 <meta property="og:site_name" content="凌云壮志几多愁">
+<meta property="og:description" content="1.我感觉Swift2.0最大改进就是减少金字塔写法（就是那种if里面再套一个if然后再套一个if很丑的代码），对于Swift1.2中的很多optional都进行确定值，使用guard和if let 可以减少一些那种金字塔的写法。
+1).使用guard
+
+guard a &amp;gt; 10 else{ return }
+
+2).使用传统的if
+
+if a &amp;gt; 10{  } 
+2.对于什么时候使用">
+<meta property="og:updated_time" content="2016-10-11T05:51:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="凌云壮志几多愁">
+<meta name="twitter:description" content="1.我感觉Swift2.0最大改进就是减少金字塔写法（就是那种if里面再套一个if然后再套一个if很丑的代码），对于Swift1.2中的很多optional都进行确定值，使用guard和if let 可以减少一些那种金字塔的写法。
+1).使用guard
+
+guard a &amp;gt; 10 else{ return }
+
+2).使用传统的if
+
+if a &amp;gt; 10{  } 
+2.对于什么时候使用">
   
     <link rel="alternative" href="/atom.xml" title="凌云壮志几多愁" type="application/atom+xml">
   
@@ -135,9 +163,7 @@
 </nav>
 
       <div class="body-wrap">
-        
-  
-    <article id="post-Swift2_Update" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Swift2_Update" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <input type="hidden" class="isFancy" />
@@ -322,70 +348,44 @@ let a = Array(g) // [ 7, 8, 9, 10, 11, 12, 13, 14 ]
   </div>
 </article>
 
-
-
-
-
-
-
-
-
-
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/10/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/10/10/hello-world/" class="archive-article-date">
-  	<time datetime="2016-10-10T05:43:38.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-10</time>
-</a>
-      
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
+<nav id="article-nav">
   
   
+    <a href="/2016/10/10/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Hello World</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+	    <a class="jiathis_button_twitter"></a>
+	    <a class="jiathis_button_plus"></a> 
+	    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+
 
 
       </div>
@@ -407,8 +407,8 @@ let a = Array(g) // [ 7, 8, 9, 10, 11, 12, 13, 14 ]
 		fancybox: true,
 		mathjax: false,
 		animate: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
