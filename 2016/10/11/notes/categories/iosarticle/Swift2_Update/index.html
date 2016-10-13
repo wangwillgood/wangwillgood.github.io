@@ -12,7 +12,7 @@
 <meta property="og:url" content="https://wangwillgood.github.io/2016/10/11/notes/categories/iosarticle/Swift2_Update/index.html">
 <meta property="og:site_name" content="凌云壮志几多愁">
 <meta property="og:description" content="Swift2.0更新1.我感觉Swift2.0最大改进就是减少金字塔写法（就是那种if里面再套一个if然后再套一个if很丑的代码），对于Swift1.2中的很多optional都进行确定值，使用guard和if let 可以减少一些那种金字塔的写法。">
-<meta property="og:updated_time" content="2016-10-13T08:52:54.000Z">
+<meta property="og:updated_time" content="2016-10-13T08:55:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="凌云壮志几多愁">
 <meta name="twitter:description" content="Swift2.0更新1.我感觉Swift2.0最大改进就是减少金字塔写法（就是那种if里面再套一个if然后再套一个if很丑的代码），对于Swift1.2中的很多optional都进行确定值，使用guard和if let 可以减少一些那种金字塔的写法。">
@@ -161,7 +161,8 @@
 </code></pre><blockquote>
 <p>2).使用传统的if</p>
 </blockquote>
-<pre><code>if a &gt; 10{  } 
+<pre><code>if a &gt; 10{ 
+ } 
 </code></pre><h6 id="2-对于什么时候使用guard什么时候使用if-（statement-＝＝-nil）什么时候使用if-let-的一些个人理解："><a href="#2-对于什么时候使用guard什么时候使用if-（statement-＝＝-nil）什么时候使用if-let-的一些个人理解：" class="headerlink" title="2.对于什么时候使用guard什么时候使用if （statement ＝＝ nil）什么时候使用if let 的一些个人理解："></a>2.对于什么时候使用guard什么时候使用if （statement ＝＝ nil）什么时候使用if let 的一些个人理解：</h6><pre><code>if let mobil = teleField.text{
 }
 //这里进行不为空的操作
