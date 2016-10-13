@@ -6,16 +6,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>凌云壮志几多愁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Swift2.0更新1.我感觉Swift2.0最大改进就是减少金字塔写法（就是那种if里面再套一个if然后再套一个if很丑的代码），对于Swift1.2中的很多optional都进行确定值，使用guard和if let 可以减少一些那种金字塔的写法。">
+  <meta name="description" content="Swift2.0更新swift2.0以及2.0以后的小版本中带了许多更行，我来记录一下我在其中积累的一些东西吧">
 <meta property="og:type" content="article">
 <meta property="og:title" content="凌云壮志几多愁">
 <meta property="og:url" content="https://wangwillgood.github.io/2016/10/11/Swift2_Update/index.html">
 <meta property="og:site_name" content="凌云壮志几多愁">
-<meta property="og:description" content="Swift2.0更新1.我感觉Swift2.0最大改进就是减少金字塔写法（就是那种if里面再套一个if然后再套一个if很丑的代码），对于Swift1.2中的很多optional都进行确定值，使用guard和if let 可以减少一些那种金字塔的写法。">
-<meta property="og:updated_time" content="2016-10-13T08:58:07.000Z">
+<meta property="og:description" content="Swift2.0更新swift2.0以及2.0以后的小版本中带了许多更行，我来记录一下我在其中积累的一些东西吧">
+<meta property="og:updated_time" content="2016-10-13T09:00:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="凌云壮志几多愁">
-<meta name="twitter:description" content="Swift2.0更新1.我感觉Swift2.0最大改进就是减少金字塔写法（就是那种if里面再套一个if然后再套一个if很丑的代码），对于Swift1.2中的很多optional都进行确定值，使用guard和if let 可以减少一些那种金字塔的写法。">
+<meta name="twitter:description" content="Swift2.0更新swift2.0以及2.0以后的小版本中带了许多更行，我来记录一下我在其中积累的一些东西吧">
   
     <link rel="alternative" href="/atom.xml" title="凌云壮志几多愁" type="application/atom+xml">
   
@@ -151,8 +151,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Swift2-0更新"><a href="#Swift2-0更新" class="headerlink" title="Swift2.0更新"></a>Swift2.0更新</h1><h6 id="1-我感觉Swift2-0最大改进就是减少金字塔写法（就是那种if里面再套一个if然后再套一个if很丑的代码），对于Swift1-2中的很多optional都进行确定值，使用guard和if-let-可以减少一些那种金字塔的写法。"><a href="#1-我感觉Swift2-0最大改进就是减少金字塔写法（就是那种if里面再套一个if然后再套一个if很丑的代码），对于Swift1-2中的很多optional都进行确定值，使用guard和if-let-可以减少一些那种金字塔的写法。" class="headerlink" title="1.我感觉Swift2.0最大改进就是减少金字塔写法（就是那种if里面再套一个if然后再套一个if很丑的代码），对于Swift1.2中的很多optional都进行确定值，使用guard和if let 可以减少一些那种金字塔的写法。"></a>1.我感觉Swift2.0最大改进就是减少金字塔写法（就是那种if里面再套一个if然后再套一个if很丑的代码），对于Swift1.2中的很多optional都进行确定值，使用guard和if let 可以减少一些那种金字塔的写法。</h6><a id="more"></a>
-<blockquote>
+        <h1 id="Swift2-0更新"><a href="#Swift2-0更新" class="headerlink" title="Swift2.0更新"></a>Swift2.0更新</h1><p>swift2.0以及2.0以后的小版本中带了许多更行，我来记录一下我在其中积累的一些东西吧</p>
+<a id="more"></a>
+<h6 id="1-我感觉Swift2-0最大改进就是减少金字塔写法（就是那种if里面再套一个if然后再套一个if很丑的代码），对于Swift1-2中的很多optional都进行确定值，使用guard和if-let-可以减少一些那种金字塔的写法。"><a href="#1-我感觉Swift2-0最大改进就是减少金字塔写法（就是那种if里面再套一个if然后再套一个if很丑的代码），对于Swift1-2中的很多optional都进行确定值，使用guard和if-let-可以减少一些那种金字塔的写法。" class="headerlink" title="1.我感觉Swift2.0最大改进就是减少金字塔写法（就是那种if里面再套一个if然后再套一个if很丑的代码），对于Swift1.2中的很多optional都进行确定值，使用guard和if let 可以减少一些那种金字塔的写法。"></a>1.我感觉Swift2.0最大改进就是减少金字塔写法（就是那种if里面再套一个if然后再套一个if很丑的代码），对于Swift1.2中的很多optional都进行确定值，使用guard和if let 可以减少一些那种金字塔的写法。</h6><blockquote>
 <p>1).使用guard</p>
 </blockquote>
 <pre><code>guard a &gt; 10 else{ 
@@ -171,7 +172,7 @@ guard let mobilePhone = teleField.textelse{
     return
 }
 //这里进行不为空的操作
-</code></pre><p>guard对于if let的优势是：不用在大括号里面进行代码的书写，这样就少了一层金字塔。因为guard的语法里面，只有当条件为假的时候才会去执行大括号里面的内容，否则执行大括号以外的内容。</p>
+</code></pre><p>guard 对于if let的优势是：不用在大括号里面进行代码的书写，这样就少了一层金字塔。因为guard的语法里面，只有当条件为假的时候才会去执行大括号里面的内容，否则执行大括号以外的内容。</p>
 <p>if let 对于guard的优势在于：虽然guard可以将代码写在大括号以外，return和throw对于内存消耗相对于来说是最顶级的，而且这样看起来代码很长的一串。</p>
 <p>对于这些还是得看自己写代码的习惯，这只是记录一下我的习惯而已</p>
 <h6 id="3-枚举和错误处理："><a href="#3-枚举和错误处理：" class="headerlink" title="3.枚举和错误处理："></a>3.枚举和错误处理：</h6><p>如果只是需要简单的错误处理，完全没有把这个ErrorTypeEnum搞得这么复杂，我这么做的原因是可以很清楚地知道错误类型，错误的描述，以及把Domain也包含进来，这样可以便于管理</p>
