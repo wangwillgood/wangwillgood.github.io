@@ -6,16 +6,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>凌云壮志几多愁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Yilia主题相关问题首先我基本上完全不懂前段的各种东西，所以调试起来相当的痛苦，可能很肤浅，可能很可笑，但是我在做，我在学。遇到这个相关的问题，最好是去yilia的github上的issue里面去寻找答案">
+  <meta name="description" content="Yilia主题相关问题首先我基本上完全不懂前端的各种东西，所以调试起来相当的痛苦。可能很肤浅，可能很可笑，但是我在做，我在学。遇到这个相关的问题，最好是去yilia的github上的 issue 里面去寻找答案">
 <meta property="og:type" content="article">
 <meta property="og:title" content="凌云壮志几多愁">
 <meta property="og:url" content="https://wangwillgood.github.io/2016/10/13/yilia_themes_custom/index.html">
 <meta property="og:site_name" content="凌云壮志几多愁">
-<meta property="og:description" content="Yilia主题相关问题首先我基本上完全不懂前段的各种东西，所以调试起来相当的痛苦，可能很肤浅，可能很可笑，但是我在做，我在学。遇到这个相关的问题，最好是去yilia的github上的issue里面去寻找答案">
-<meta property="og:updated_time" content="2016-10-13T09:17:31.000Z">
+<meta property="og:description" content="Yilia主题相关问题首先我基本上完全不懂前端的各种东西，所以调试起来相当的痛苦。可能很肤浅，可能很可笑，但是我在做，我在学。遇到这个相关的问题，最好是去yilia的github上的 issue 里面去寻找答案">
+<meta property="og:updated_time" content="2016-10-13T09:41:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="凌云壮志几多愁">
-<meta name="twitter:description" content="Yilia主题相关问题首先我基本上完全不懂前段的各种东西，所以调试起来相当的痛苦，可能很肤浅，可能很可笑，但是我在做，我在学。遇到这个相关的问题，最好是去yilia的github上的issue里面去寻找答案">
+<meta name="twitter:description" content="Yilia主题相关问题首先我基本上完全不懂前端的各种东西，所以调试起来相当的痛苦。可能很肤浅，可能很可笑，但是我在做，我在学。遇到这个相关的问题，最好是去yilia的github上的 issue 里面去寻找答案">
   
     <link rel="alternative" href="/atom.xml" title="凌云壮志几多愁" type="application/atom+xml">
   
@@ -54,7 +54,7 @@
 	        
 				<li><a href="/archives">所有</a></li>
 	        
-				<li><a href="/notes/categories/iosarticle">技术</a></li>
+				<li><a href="/iosarticle">技术</a></li>
 	        
 				<li><a href="/tags/随笔">随笔</a></li>
 	        
@@ -123,7 +123,7 @@
 		        
 					<li><a href="/archives">所有</a></li>
 		        
-					<li><a href="/notes/categories/iosarticle">技术</a></li>
+					<li><a href="/iosarticle">技术</a></li>
 		        
 					<li><a href="/tags/随笔">随笔</a></li>
 		        
@@ -151,8 +151,17 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Yilia主题相关问题"><a href="#Yilia主题相关问题" class="headerlink" title="Yilia主题相关问题"></a>Yilia主题相关问题</h1><p>首先我基本上完全不懂前段的各种东西，所以调试起来相当的痛苦，可能很肤浅，可能很可笑，但是我在做，我在学。<br>遇到这个相关的问题，最好是去yilia的github上的issue里面去寻找答案<br><a id="more"></a></p>
-<h3 id="关于主页显示更多"><a href="#关于主页显示更多" class="headerlink" title="关于主页显示更多"></a>关于主页显示更多</h3><p>在最开始的解决办法中可以在hexo主题root目录<code>_config.yml</code>文件中加入<code>archive: 1</code>来进行设置</p>
+        <h1 id="Yilia主题相关问题"><a href="#Yilia主题相关问题" class="headerlink" title="Yilia主题相关问题"></a>Yilia主题相关问题</h1><p>首先我基本上完全不懂前端的各种东西，所以调试起来相当的痛苦。可能很肤浅，可能很可笑，但是我在做，我在学。<br>遇到这个相关的问题，最好是去yilia的github上的 <a href="https://github.com/litten/hexo-theme-yilia/issues" target="_blank" rel="external">issue</a> 里面去寻找答案</p>
+<a id="more"></a>
+<h3 id="关于主页显示更多"><a href="#关于主页显示更多" class="headerlink" title="关于主页显示更多"></a>关于主页显示更多</h3><blockquote>
+<p>_config.yml中添加archive</p>
+</blockquote>
+<p>在最开始的解决办法中可以在hexo主题root目录<code>_config.yml</code>文件中加入<code>archive: 1</code>来进行设置。<br><br><br>但是最后的结果是失望的😞，不知道是我的设置不恰当还是hexo不支持archive的设置了，没办法必须要找另一种解决办法。</p>
+<blockquote>
+<p>在md文件中添加more</p>
+</blockquote>
+<p>举个🌰，比如你想写一篇文章，其中包括了标题，文章的开头综述，文章正文等等，此时你只需要将标题和综述在主页显示，而正文需要查看详情才能查看的话，可以使用<code>more</code>来达到你的目的。<br></p>
+<p><pre><br>标题<br>综述<br><!--more--><br>正文<br></pre><br>这样就能达到显示更多的目的</p>
 
       
     </div>
