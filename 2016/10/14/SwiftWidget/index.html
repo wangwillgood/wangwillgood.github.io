@@ -12,13 +12,13 @@
 <meta property="og:url" content="https://wangwillgood.github.io/2016/10/14/SwiftWidget/index.html">
 <meta property="og:site_name" content="凌云壮志几多愁">
 <meta property="og:description" content="Widgets Extensions实践简介和注意事项Widgets Extensions在Apple众多App Extensions 中的Today，其设计目的是为了能让用户更快捷的操作自己感兴趣的事情。">
-<meta property="og:image" content="https://wangwillgood.github.io/Users/Wil/blog/blog/public/upload/SwiftWidget/swiftwidget1.png">
-<meta property="og:image" content="https://wangwillgood.github.io/Users/Wil/blog/blog/public/upload/SwiftWidget/swiftwidget_custom.png">
-<meta property="og:updated_time" content="2016-10-18T08:50:56.000Z">
+<meta property="og:image" content="https://wangwillgood.github.io/upload/swiftwidget1.png">
+<meta property="og:image" content="https://wangwillgood.github.io/upload/swiftwidget2.png">
+<meta property="og:updated_time" content="2016-10-18T09:59:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="凌云壮志几多愁">
 <meta name="twitter:description" content="Widgets Extensions实践简介和注意事项Widgets Extensions在Apple众多App Extensions 中的Today，其设计目的是为了能让用户更快捷的操作自己感兴趣的事情。">
-<meta name="twitter:image" content="https://wangwillgood.github.io/Users/Wil/blog/blog/public/upload/SwiftWidget/swiftwidget1.png">
+<meta name="twitter:image" content="https://wangwillgood.github.io/upload/swiftwidget1.png">
   
     <link rel="alternative" href="/atom.xml" title="凌云壮志几多愁" type="application/atom+xml">
   
@@ -154,7 +154,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Widgets-Extensions实践"><a href="#Widgets-Extensions实践" class="headerlink" title="Widgets Extensions实践"></a>Widgets Extensions实践</h1><h4 id="简介和注意事项"><a href="#简介和注意事项" class="headerlink" title="简介和注意事项"></a>简介和注意事项</h4><p>Widgets Extensions在Apple众多<a href="https://developer.apple.com/library/content/documentation/General/Conceptual/ExtensibilityPG/Action.html#//apple_ref/doc/uid/TP40014214-CH13-SW1" target="_blank" rel="external">App Extensions</a> 中的<code>Today</code>，其设计目的是为了能让用户更快捷的操作自己感兴趣的事情。<br><br><img src="/Users/Wil/blog/blog/public/upload/SwiftWidget/swiftwidget1.png" alt="Widget"></p>
+        <h1 id="Widgets-Extensions实践"><a href="#Widgets-Extensions实践" class="headerlink" title="Widgets Extensions实践"></a>Widgets Extensions实践</h1><h4 id="简介和注意事项"><a href="#简介和注意事项" class="headerlink" title="简介和注意事项"></a>简介和注意事项</h4><p>Widgets Extensions在Apple众多<a href="https://developer.apple.com/library/content/documentation/General/Conceptual/ExtensibilityPG/Action.html#//apple_ref/doc/uid/TP40014214-CH13-SW1" target="_blank" rel="external">App Extensions</a> 中的<code>Today</code>，其设计目的是为了能让用户更快捷的操作自己感兴趣的事情。<br><br><img src="/upload/swiftwidget1.png" alt="Widget"></p>
 <a id="more"></a>
 <p>Apple在描述它是这样描述的</p>
 <pre>
@@ -179,7 +179,7 @@ App extensions in the Today view are called widgets.Widgets give users quick acc
 </blockquote>
 <h4 id="Custom-Controller"><a href="#Custom-Controller" class="headerlink" title="Custom Controller"></a>Custom Controller</h4><p>通过以上步骤，打开<code>cdfer</code>文件目录下可以看到一个<code>TodayViewController</code>和一个<code>MainInterface.storyboard</code>和<code>Info.plist</code>.<br><br>如果我们不想使用Apple给我们提供的TodayViewController模版呢，而是想自己创建一个Controller呢？办法肯定是有的～～～<br><br>在Apple Developer中有明确的说了解决办法:<br></p>
 <p><pre><br>iOS. If you don’t want to use the storyboard file provided by the template, remove the NSExtensionMainStoryboard key and add the NSExtensionPrincipalClass key, using the name of your view controller for the value.<br></pre><br>意思就是说如果你不想使用Apple提供的StoryBoard的模版的话，你可以在plist文件中移除<code>NSExtensionMainStoryboard</code>对应的键值对，然后再添加<code>NSExtensionPrincipalClass</code>,这个key对应的value就是你想自定义的controller的名称。<br>这很简单，但是这里有一个坑，如果你使用Swift工程来照着做的话，是肯定会出现程序崩溃的！他会报错<code>NSExtensionPrincipalClass</code>对应值拿不到，所以<code>NSExtensionPrincipalClass</code>对应的key需要修改一下:<br></p>
-<p><pre><br>\<key\>NSExtensionPrincipalClass\<br>\<string>“your extension name”.CustomTodayViewController\</string><br>比如:<br>\<key\>NSExtensionPrincipalClass\<br>\<string>cdfer.CustomTodayViewController\</string><br></key\></key\></pre><br><img src="/Users/Wil/blog/blog/public/upload/SwiftWidget/swiftwidget_custom.png" alt="WidgetCustom"><br><br>通过上面的修改就能使用自定义的Controller了。</p>
+<p><pre><br>\<key\>NSExtensionPrincipalClass\<br>\<string>“your extension name”.CustomTodayViewController\</string><br>比如:<br>\<key\>NSExtensionPrincipalClass\<br>\<string>cdfer.CustomTodayViewController\</string><br></key\></key\></pre><br><img src="/upload/swiftwidget2.png" alt="WidgetCustom"><br><br>通过上面的修改就能使用自定义的Controller了。</p>
 <p>推荐:<br><br><a href="https://developer.apple.com/library/content/documentation/General/Conceptual/ExtensibilityPG/Today.html#//apple_ref/doc/uid/TP40014214-CH11-SW1" target="_blank" rel="external">Apple Developer For Today</a></p>
 
       
