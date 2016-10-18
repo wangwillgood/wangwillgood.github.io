@@ -4,14 +4,21 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Archives: 2016/10 | 凌云壮志几多愁</title>
+  <title>凌云壮志几多愁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
+  <meta name="description" content="Widgets Extensions实践简介和注意事项Widgets Extensions在Apple众多[App Extensions] (1) 中的Today，其设计目的是为了能让用户更快捷的操作自己感兴趣的事情。">
+<meta property="og:type" content="article">
 <meta property="og:title" content="凌云壮志几多愁">
-<meta property="og:url" content="https://wangwillgood.github.io/archives/2016/10/index.html">
+<meta property="og:url" content="https://wangwillgood.github.io/2016/10/14/SwiftWidget/index.html">
 <meta property="og:site_name" content="凌云壮志几多愁">
+<meta property="og:description" content="Widgets Extensions实践简介和注意事项Widgets Extensions在Apple众多[App Extensions] (1) 中的Today，其设计目的是为了能让用户更快捷的操作自己感兴趣的事情。">
+<meta property="og:image" content="https://wangwillgood.github.io/Users/Wil/blog/blog/public/upload/SwiftWidget/swiftwidget1.png">
+<meta property="og:image" content="https://wangwillgood.github.io/Users/Wil/blog/blog/public/upload/SwiftWidget/swiftwidget_custom.png">
+<meta property="og:updated_time" content="2016-10-18T06:13:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="凌云壮志几多愁">
+<meta name="twitter:description" content="Widgets Extensions实践简介和注意事项Widgets Extensions在Apple众多[App Extensions] (1) 中的Today，其设计目的是为了能让用户更快捷的操作自己感兴趣的事情。">
+<meta name="twitter:image" content="https://wangwillgood.github.io/Users/Wil/blog/blog/public/upload/SwiftWidget/swiftwidget1.png">
   
     <link rel="alternative" href="/atom.xml" title="凌云壮志几多愁" type="application/atom+xml">
   
@@ -139,85 +146,95 @@
 </nav>
 
       <div class="body-wrap">
-        
-  
-  
+        <article id="post-SwiftWidget" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
     
     
+    <div class="article-entry" itemprop="articleBody">
       
+        <h1 id="Widgets-Extensions实践"><a href="#Widgets-Extensions实践" class="headerlink" title="Widgets Extensions实践"></a>Widgets Extensions实践</h1><h4 id="简介和注意事项"><a href="#简介和注意事项" class="headerlink" title="简介和注意事项"></a>简介和注意事项</h4><p>Widgets Extensions在Apple众多[App Extensions] (1) 中的<code>Today</code>，其设计目的是为了能让用户更快捷的操作自己感兴趣的事情。<br><br><img src="/Users/Wil/blog/blog/public/upload/SwiftWidget/swiftwidget1.png" alt="Widget"></p>
+<a id="more"></a>
+<p>Apple在描述它是这样描述的</p>
+<pre>
+App extensions in the Today view are called widgets.Widgets give users quick access to information that’s important right now. <br>For example, users open the Today view to check current stock prices or weather conditions, see today’s schedule, or perform a quick task such as marking an item as done. <br>Users tend to open the Today view frequently, and they expect the information they’re interested in to be instantly available.
+</pre>
+我来粗略的翻译一下就是说：<br>
+<pre>
+在手机通知中心(或者在iOS10及其以上版本中主界面,锁屏界面左滑)"今天"视图中的App Extensions叫做"Widget"。<br>Widget的目的是为了方便用户能够快速对自己感兴趣的东西快速的做出相应动作。
+</pre>
+
+<blockquote>
+<p>注意事项<br><br>1.Widget最好只是做一些很容易更新很简单的任务，最好不用把他用在需要多步或者很长任务中。<br><br>2.避免在Widgets放入一个ScrollView</p>
+</blockquote>
+<p>上面的提到的注意事项特别是不要放入ScrollView及其子类相关是要特别注意的。通过介绍了上面这么多的概念和注意事项之后，先来实践一边吧。</p>
+<h4 id="Getting-Start"><a href="#Getting-Start" class="headerlink" title="Getting Start"></a>Getting Start</h4><p>样例工程是由Swift写的，<br>Widget并不是独立存在的，所以你需要先创建一个Project(这里我的Project名为<code>WidgetDemo</code>)，然后我们一步一步来创建自己的Widget吧。<br></p>
+<p><ol></ol></p>
+<p><li>首先我们必须先创建一个<code>Today Extension</code>，具体创建步骤为<code>File -&gt; New -&gt; Target -&gt; Today Extension</code>点击next并输入您的Extension名称(名称<code>cdfer</code>)，回车之后你会在左边的文件列表中看到自己刚刚创建的Target了。</li></p>
+<p><li>现在你需要点击进入<code>WidgetDemo</code>,并选中<code>TARGETS</code>下面的<code>cdfer</code>,点击Capabilities按钮，将<code>App Group</code>的switch处于<code>on</code>的状态，并点击<code>+</code>创建一个App Group(我这里的名为:<code>group.widgetdemo.blog</code>)。</li></p>
+<p><li>选中在同一个<code>TARGETS</code>下的主工程target，也就是我前面创建的<code>WidgetDemo</code>。同样点击Capabilities按钮，并将App Group按钮打开，最后将你刚刚创建的App Group钩上就可以关联上了。</li><br><br>到这里我们就成功创建了包涵<code>Today Extension</code>的project，点击运行就能在<code>今天</code>页面添加你自己创建的Widget，清晰地看见Hello word。<br><br>然后我们继续往下走！</p>
+<h4 id="Design-the-UI"><a href="#Design-the-UI" class="headerlink" title="Design the UI"></a>Design the UI</h4><blockquote>
+<p>IMPORTANT<br><br>建议最好使用AutoLayout来设计Today widget的界面</p>
+</blockquote>
+<h4 id="Custom-Controller"><a href="#Custom-Controller" class="headerlink" title="Custom Controller"></a>Custom Controller</h4><p>通过以上步骤，打开<code>cdfer</code>文件目录下可以看到一个<code>TodayViewController</code>和一个<code>MainInterface.storyboard</code>和<code>Info.plist</code>.<br><br>如果我们不想使用Apple给我们提供的TodayViewController模版呢，而是想自己创建一个Controller呢？办法肯定是有的～～～<br><br>在Apple Developer中有明确的说了解决办法:<br></p>
+<p><pre><br>iOS. If you don’t want to use the storyboard file provided by the template, remove the NSExtensionMainStoryboard key and add the NSExtensionPrincipalClass key, using the name of your view controller for the value.<br></pre><br>意思就是说如果你不想使用Apple提供的StoryBoard的模版的话，你可以在plist文件中移除<code>NSExtensionMainStoryboard</code>对应的键值对，然后再添加<code>NSExtensionPrincipalClass</code>,这个key对应的value就是你想自定义的controller的名称。<br>这很简单，但是这里有一个坑，如果你使用Swift工程来照着做的话，是肯定会出现程序崩溃的！他会报错<code>NSExtensionPrincipalClass</code>对应值拿不到，所以<code>NSExtensionPrincipalClass</code>对应的key需要修改一下:<br></p>
+<p><pre><br>\<key\>NSExtensionPrincipalClass\<br>\<string>“your extension name”.CustomTodayViewController\</string><br>比如:<br>\<key\>NSExtensionPrincipalClass\<br>\<string>cdfer.CustomTodayViewController\</string><br></key\></key\></pre><br><img src="/Users/Wil/blog/blog/public/upload/SwiftWidget/swiftwidget_custom.png" alt="WidgetCustom"><br><br>通过上面的修改就能使用自定义的Controller了。</p>
+<p>推荐:<br><br>[Apple Developer For Today] (2)</p>
+
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/10/14/SwiftWidget/" class="archive-article-date">
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2016/10/14/SwiftWidget/" class="archive-article-date">
   	<time datetime="2016-10-14T07:27:57.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-14</time>
 </a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+      
+      
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/10/13/yilia_themes_custom/" class="archive-article-date">
-  	<time datetime="2016-10-13T09:03:53.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-13</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/10/11/Swift2_Update/" class="archive-article-date">
-  	<time datetime="2016-10-11T05:51:42.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-11</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+<nav id="article-nav">
+  
+  
+    <a href="/2016/10/13/yilia_themes_custom/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
 
-    
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+	    <a class="jiathis_button_twitter"></a>
+	    <a class="jiathis_button_plus"></a> 
+	    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+
 
 
       </div>
@@ -240,8 +257,8 @@
 		mathjax: false,
 		animate: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
