@@ -14,7 +14,7 @@
 <meta property="og:description" content="Widgets Extensions实践简介和注意事项Widgets Extensions在Apple众多App Extensions 中的Today，其设计目的是为了能让用户更快捷的操作自己感兴趣的事情。">
 <meta property="og:image" content="https://wangwillgood.github.io/upload/swiftwidget1.png">
 <meta property="og:image" content="https://wangwillgood.github.io/upload/swiftwidget2.png">
-<meta property="og:updated_time" content="2016-10-18T09:59:00.000Z">
+<meta property="og:updated_time" content="2016-10-18T10:55:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="凌云壮志几多愁">
 <meta name="twitter:description" content="Widgets Extensions实践简介和注意事项Widgets Extensions在Apple众多App Extensions 中的Today，其设计目的是为了能让用户更快捷的操作自己感兴趣的事情。">
@@ -174,10 +174,10 @@ App extensions in the Today view are called widgets.Widgets give users quick acc
 <p><li>首先我们必须先创建一个<code>Today Extension</code>，具体创建步骤为<code>File -&gt; New -&gt; Target -&gt; Today Extension</code>点击next并输入您的Extension名称(名称<code>cdfer</code>)，回车之后你会在左边的文件列表中看到自己刚刚创建的Target了。</li></p>
 <p><li>现在你需要点击进入<code>WidgetDemo</code>,并选中<code>TARGETS</code>下面的<code>cdfer</code>,点击Capabilities按钮，将<code>App Group</code>的switch处于<code>on</code>的状态，并点击<code>+</code>创建一个App Group(我这里的名为:<code>group.widgetdemo.blog</code>)。</li></p>
 <p><li>选中在同一个<code>TARGETS</code>下的主工程target，也就是我前面创建的<code>WidgetDemo</code>。同样点击Capabilities按钮，并将App Group按钮打开，最后将你刚刚创建的App Group钩上就可以关联上了。</li><br><br>到这里我们就成功创建了包涵<code>Today Extension</code>的project，点击运行就能在<code>今天</code>页面添加你自己创建的Widget，清晰地看见Hello word。<br><br>然后我们继续往下走！</p>
-<h4 id="Design-the-UI"><a href="#Design-the-UI" class="headerlink" title="Design the UI"></a>Design the UI</h4><blockquote>
+<h4 id="UI"><a href="#UI" class="headerlink" title="UI"></a>UI</h4><blockquote>
 <p>IMPORTANT<br><br>建议最好使用AutoLayout来设计Today widget的界面</p>
 </blockquote>
-<h4 id="Custom-Controller"><a href="#Custom-Controller" class="headerlink" title="Custom Controller"></a>Custom Controller</h4><p>通过以上步骤，打开<code>cdfer</code>文件目录下可以看到一个<code>TodayViewController</code>和一个<code>MainInterface.storyboard</code>和<code>Info.plist</code>.<br><br>如果我们不想使用Apple给我们提供的TodayViewController模版呢，而是想自己创建一个Controller呢？办法肯定是有的～～～<br><br>在Apple Developer中有明确的说了解决办法:<br></p>
+<h4 id="自定义控制器"><a href="#自定义控制器" class="headerlink" title="自定义控制器"></a>自定义控制器</h4><p>通过以上步骤，打开<code>cdfer</code>文件目录下可以看到一个<code>TodayViewController</code>和一个<code>MainInterface.storyboard</code>和<code>Info.plist</code>.<br><br>如果我们不想使用Apple给我们提供的TodayViewController模版呢，而是想自己创建一个Controller呢？办法肯定是有的～～～<br><br>在Apple Developer中有明确的说了解决办法:<br></p>
 <p><pre><br>iOS. If you don’t want to use the storyboard file provided by the template, remove the NSExtensionMainStoryboard key and add the NSExtensionPrincipalClass key, using the name of your view controller for the value.<br></pre><br>意思就是说如果你不想使用Apple提供的StoryBoard的模版的话，你可以在plist文件中移除<code>NSExtensionMainStoryboard</code>对应的键值对，然后再添加<code>NSExtensionPrincipalClass</code>,这个key对应的value就是你想自定义的controller的名称。<br>这很简单，但是这里有一个坑，如果你使用Swift工程来照着做的话，是肯定会出现程序崩溃的！他会报错<code>NSExtensionPrincipalClass</code>对应值拿不到，所以<code>NSExtensionPrincipalClass</code>对应的key需要修改一下:<br></p>
 <p><pre><br>\<key\>NSExtensionPrincipalClass\<br>\<string>“your extension name”.CustomTodayViewController\</string><br>比如:<br>\<key\>NSExtensionPrincipalClass\<br>\<string>cdfer.CustomTodayViewController\</string><br></key\></key\></pre><br><img src="/upload/swiftwidget2.png" alt="WidgetCustom"><br><br>通过上面的修改就能使用自定义的Controller了。</p>
 <p>推荐:<br><br><a href="https://developer.apple.com/library/content/documentation/General/Conceptual/ExtensibilityPG/Today.html#//apple_ref/doc/uid/TP40014214-CH11-SW1" target="_blank" rel="external">Apple Developer For Today</a></p>
@@ -200,9 +200,18 @@ App extensions in the Today view are called widgets.Widgets give users quick acc
   
 <nav id="article-nav">
   
+    <a href="/2016/10/25/swift3_UnsafePointer/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
   
-    <a href="/2016/10/13/yilia_themes_custom/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title"></div>
+  
+    <a href="/2016/10/13/iosarticle/index/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">技术</div>
       <i class="icon-circle-right"></i>
     </a>
   

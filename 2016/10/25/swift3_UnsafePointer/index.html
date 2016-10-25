@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>凌云壮志几多愁</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Swift3 Unsafe[Mutable]Pointer这篇文章水准不高，可能因为我自己能力有限，英文水平也就这样，自己能看懂，可能存在误人子弟的可能性，所以如果有人有机会看到了这边文章就当是一个小白的入门级的笔记吧！如果需要更深入的了解请查看文末的参考链接为了将我的PhotoCutter适配Swfit3一看到一大堆的Unsafe[Mutable]Pointer的错误就是脑壳疼！最头疼的事没有找">
+<meta property="og:type" content="article">
+<meta property="og:title" content="凌云壮志几多愁">
+<meta property="og:url" content="https://wangwillgood.github.io/2016/10/25/swift3_UnsafePointer/index.html">
+<meta property="og:site_name" content="凌云壮志几多愁">
+<meta property="og:description" content="Swift3 Unsafe[Mutable]Pointer这篇文章水准不高，可能因为我自己能力有限，英文水平也就这样，自己能看懂，可能存在误人子弟的可能性，所以如果有人有机会看到了这边文章就当是一个小白的入门级的笔记吧！如果需要更深入的了解请查看文末的参考链接为了将我的PhotoCutter适配Swfit3一看到一大堆的Unsafe[Mutable]Pointer的错误就是脑壳疼！最头疼的事没有找">
+<meta property="og:updated_time" content="2016-10-25T10:21:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="凌云壮志几多愁">
+<meta name="twitter:description" content="Swift3 Unsafe[Mutable]Pointer这篇文章水准不高，可能因为我自己能力有限，英文水平也就这样，自己能看懂，可能存在误人子弟的可能性，所以如果有人有机会看到了这边文章就当是一个小白的入门级的笔记吧！如果需要更深入的了解请查看文末的参考链接为了将我的PhotoCutter适配Swfit3一看到一大堆的Unsafe[Mutable]Pointer的错误就是脑壳疼！最头疼的事没有找">
+  
+    <link rel="alternative" href="/atom.xml" title="凌云壮志几多愁" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="//favicon.png">
+  
+  <script src="/style.js"></script>
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+      <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/upload/avatar.JPG" class="js-avatar show">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Will</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">男儿不展风云志，空负天生八尺躯</p>
+		
+
+		<nav class="header-menu">
+			<ul>
+			
+				<li><a href="/">主页</a></li>
+	        
+				<li><a href="/archives">所有</a></li>
+	        
+				<li><a href="/iosarticle">技术</a></li>
+	        
+				<li><a href="/tags/随笔">随笔</a></li>
+	        
+			</ul>
+		</nav>
+		<nav class="header-smart-menu">
+	        
+    		
+    			
+    			<a class="js-smart-menu" data-idx="0" href="javascript:void(0)">所有文章</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="1" href="javascript:void(0)">标签</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="2" href="javascript:void(0)">友链</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="3" href="javascript:void(0)">关于我</a>
+    			
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="https://github.com/wangwangok" title="github">github</a>
+		        
+					<a class="weibo" target="_blank" href="http://weibo.com/wwloading" title="weibo">weibo</a>
+		        
+			</div>
+		</nav>
+	</header>		
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"><i class="icon-list"></i></div>
+  		<h1 class="header-author js-mobile-header hide">Will</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				
+					<img src="/upload/avatar.JPG" class="js-avatar">
+				
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Will</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">男儿不展风云志，空负天生八尺躯</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有</a></li>
+		        
+					<li><a href="/iosarticle">技术</a></li>
+		        
+					<li><a href="/tags/随笔">随笔</a></li>
+		        
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/wangwangok" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/wwloading" title="weibo">weibo</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap">
+        <article id="post-swift3_UnsafePointer" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Swift3-Unsafe-Mutable-Pointer"><a href="#Swift3-Unsafe-Mutable-Pointer" class="headerlink" title="Swift3 Unsafe[Mutable]Pointer"></a>Swift3 Unsafe[Mutable]Pointer</h1><p>这篇文章水准不高，可能因为我自己能力有限，英文水平也就这样，自己能看懂，可能存在误人子弟的可能性，所以如果有人有机会看到了这边文章就当是一个小白的入门级的笔记吧！如果需要更深入的了解请查看文末的参考链接<br><br>为了将我的PhotoCutter适配Swfit3一看到一大堆的Unsafe[Mutable]Pointer的错误就是脑壳疼！最头疼的事没有找到这方面的中文资料，只有自己来弄了，然后记录一下吧，现在项目还是用OC，一天不写就生疏,怕以后来自己又忘记了，然后自己纪录一下吧…<br><a id="more"></a></p>
+<p>在开始之前需要介绍一下<code>Unsafe[Mutable]Pointer,Unsafe[Mutabl]RawPointer,Unsafe[Mutable]BufferPointer</code>;<br></p>
+<blockquote>
+<p>1.我的理解:<code>UnsafeMutablePointer</code>其实就是<code>UnsafePointer</code>的可以变化的类型，但是<code>UnsafePointer</code>又不允许你去改变指针元素<br></p>
+<p>2.Unsafe[Mutable]RawPointer:在swift3以前为<code>Unsafe[Mutable]Pointer&lt;Void&gt;</code>,也就是c中的<code>void *</code></p>
+<p>3.Unsafe[Mutable]BufferPointer表示一连串的数组指针</p>
+</blockquote>
+<h4 id="withUnsafePointer-withUnsafeMutablePointer"><a href="#withUnsafePointer-withUnsafeMutablePointer" class="headerlink" title="withUnsafePointer/withUnsafeMutablePointer"></a>withUnsafePointer/withUnsafeMutablePointer</h4><p>比如下面我用c的方式创建和销毁了一个<code>int</code>型的指针<code>a</code>:</p>
+<pre>
+int *a = malloc(sizeof(int));
+*a = 10;
+free(a)
+</pre>
+假设在swift中`var a:Int = 10`,现在我们的目的是想创建一个指针a,我们需要将`a`转成`*a`，我们需要怎么做呢？这里可以用到`withUnsafePointer/withUnsafeMutablePointer`<br>
+这两个函数会以swift类型和一个block为参数，而这个目的指针就是这个block的参数。也就是说你想将某一个swift类型的参数转换为一个指针result，这个result就是你想获得的指针，也就是下面两个例子中的ptr，希望我这个描述没有把你绕晕！<br>
+这里我也以swift.org上面的socket例子来写吧!
+`var addrin = sockaddr_in()`
+> 创建UnsafeMutablePointer
+
+<pre>
+withUnsafeMutablePointer(to: &addrin) { ptr in
+    //ptr:UnsafeMutablePointer\<sockaddr_in>
+}
+</sockaddr_in></pre>
+
+<blockquote>
+<p>创建UnsafePointer</p>
+</blockquote>
+<pre>
+withUnsafePointer(to: &addrin) { ptr in
+    //ptr: UnsafePointer\<sockaddr_in>
+}
+</sockaddr_in></pre> 
+
+<h4 id="withUnsafeBytes-withUnsafeMutableBytes"><a href="#withUnsafeBytes-withUnsafeMutableBytes" class="headerlink" title="withUnsafeBytes/withUnsafeMutableBytes"></a>withUnsafeBytes/withUnsafeMutableBytes</h4><p>通过<code>withUnsafeBytes/withUnsafeMutableBytes</code>获得的<code>bytes</code>只能在在函数closure里面进行使用，这个函数只相对于<code>Data</code>类型来获取bytes使用！</p>
+<pre>
+func unsafebytes() {
+    guard let data = ".".data(using: .ascii) else{ return }
+    data.withUnsafeBytes { (byte:UnsafePointer<cchar>) -> Void in
+        print(byte) 
+    }
+}
+unsafebytes()
+</cchar></pre>
+
+<h4 id="withMemoryRebound"><a href="#withMemoryRebound" class="headerlink" title="withMemoryRebound"></a>withMemoryRebound</h4><p>我们可以使用<code>withMemoryRebound</code>函数，来将一个类型的指针转换为另外一个类型的指针，使用这个函数的时候也有一些需要注意点，在[UnsafeRawPointer Migration] (1)的介绍中说到:<code>Conversion from UnsafePointer&lt;T&gt; to UnsafePointer&lt;U&gt; has been disallowed</code>，所以只能将<code>UnsafePointer\&lt;Int&gt;</code>转换为<code>UnsafeMutablePointer\&lt;UInt8&gt;</code>.</p>
+<blockquote>
+<p>UnsafePointer\<int> -&gt; UnsafeMutablePointer\<uint8></uint8></int></p>
+</blockquote>
+<pre>
+var a = 10
+withUnsafePointer(to: &a) { a_pt in
+    a_pt.withMemoryRebound(to: UInt8.self, capacity: 1, { a_pt_uint8 in
+           //a_pt_uint8:UnsafeMutablePointer           
+    })
+}
+</pre>
+
+<p>具体的使用场景:<br>在使用socket的时候需要<code>bind</code>或者<code>connect</code>的时候<br>这个函数的具体使用场景在[UnsafeRawPointer Migration] (1)中也有提到。<br></p>
+<blockquote>
+<p>sockaddr_in －&gt; sockaddr</p>
+</blockquote>
+<pre>
+var addrin = sockaddr_in()
+let sock = socket(PF_INET, SOCK_STREAM, 0)
+let result = withUnsafePointer(to: &addrin) {
+    $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+        connect(sock, $0, socklen_t(MemoryLayout<sockaddr_in>.stride))
+    }
+}
+</sockaddr_in></pre>
+
+
+<h4 id="assumingMemoryBound"><a href="#assumingMemoryBound" class="headerlink" title="assumingMemoryBound"></a>assumingMemoryBound</h4><p>将<code>UnsafeRawPointer</code>转换为<code>UnsafePointer&lt;T&gt;</code>类型，也就是swift3之前的<code>UnsafePointer&lt;Void&gt;</code>到<code>UnsafePointer&lt;T&gt;</code>。<br><br>这个和前面提到的函数<code>withMemoryRebound</code>的区别就是:</p>
+<blockquote>
+<p>assumingMemoryBound可以看成是withMemoryRebound的一个特例，即:<br><br><code>assumingMemoryBound</code>为<code>UnsafePointer&lt;Void&gt;</code>到<code>UnsafePointer&lt;T&gt;</code>，<br><br><code>withMemoryRebound</code>为<code>UnsafePointer&lt;U&gt;</code>到<code>UnsafeMutablePointer&lt;T&gt;</code></p>
+</blockquote>
+<p>代码示例:<br></p>
+<pre>
+let strPtr = UnsafeMutablePointer\<cfstring>.allocate(capacity: 1)
+let rawPtr = UnsafeRawPointer(strPtr)
+let intPtr = rawPtr.assumingMemoryBound(to: Int.self)
+</cfstring></pre>
+
+
+<h4 id="bindMemory"><a href="#bindMemory" class="headerlink" title="bindMemory"></a>bindMemory</h4><p>绑定一个类型\<t>到已经被分配的内存空间，返回一个绑定在<code>self</code>内存上<code>UnsafePointer&lt;T&gt;</code>的指针，需要注意的是这个函数是用于Unsafe[Mutable]RawPointer。<br></t></p>
+<pre>
+/// - Precondition: The memory is uninitialized.
+/// - Postcondition: The memory is bound to 'T' starting at `self` continuing
+///   through `self` + `count` * `MemoryLayout<t>.stride`
+/// - Warning: Binding memory to a type is potentially undefined if the
+///   memory is ever accessed as an unrelated type.
+</t></pre>
+
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>内存状态</th>
+<th>类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rawptr = allocate()</code></td>
+<td>uninitialized</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>tptr = rawptr.bindMemory(T)</code></td>
+<td>uninitialized</td>
+<td>bound to T</td>
+</tr>
+<tr>
+<td><code>tptr.initialize()</code></td>
+<td>initialized</td>
+<td>bound to T</td>
+</tr>
+</tbody>
+</table>
+<p>从上面的表格结合文档里面对于<code>bindMemory</code>的说明来看，我对于<code>bindMemory</code>的理解就是，使用函数之前这块内存空间是没有被初始化的，使用<code>bindMemory</code>的目的是将<code>T</code>绑定到<code>self</code>后面<code>self</code> + <code>count</code> * <code>MemoryLayout&lt;T&gt;.stride</code>长度的的这块内存空间上来。但是绑定上来并不代表初始化了，此时这个内存空间仍然是没有初始化的，所以最后需要调用函数<code>initialize</code>的函数来初始化!<br><br>这个函数的使用可能会有问题…先上一段我自己理解的代码吧</p>
+<pre>
+let a = 100
+let a_rawptr = UnsafeMutableRawPointer.allocate(bytes: MemoryLayout\<int>.size, alignedTo: MemoryLayout\<int>.alignment)
+let bind_rawptr = a_rawptr.bindMemory(to: Int.self, capacity: MemoryLayout\<int>.stride)
+bind_rawptr.initialize(to: a)
+</int></int></int></pre>
+从这里可以把`void *`的C类型转换为Swift的类型。关于[Custom memory allocation](2)
+
+#### unsafeBitCast ####
+返回一个翻译成某一特定类型的值！,`这个会破坏Swift的类型系统`！
+>特别注意⚠️:
+>不到万不得已不要使用这个函数
+
+
+#### 实战 ####
+PhotoCutter为了适配Swift3，这其中大部分和指针相关的东西需要适配，我开始看到这些也是懵逼的，根本不懂怎么改，只有自己去慢慢学。我的方法可能很差，就目前而言是适配了，下面贴上我的修改的代码吧!
+>Swift2.x
+
+<pre>
+options = CFDictionaryCreate(kCFAllocatorDefault,
+            UnsafeMutablePointer(UnsafePointer<void>(keys)),
+            UnsafeMutablePointer(UnsafePointer<void>(values)),
+            2,
+            &kcKeysBack,
+            &kcValuesBack)
+</void></void></pre>
+
+<blockquote>
+<p>Swift3.0</p>
+</blockquote>
+<pre>
+fileprivate func buffer<t>(to type:T.Type, source:[T]) -> UnsafeMutablePointer<unsaferawpointer?>{
+    var buffer = UnsafeMutablePointer<unsaferawpointer?>.allocate(capacity: source.count)
+    for idx in 0..<source.count {="" let="" m_ptr="UnsafeMutableRawPointer.allocate(bytes:" memorylayout<t="">.size, alignedTo: MemoryLayout<t>.alignment)
+        let bindptr = m_ptr.bindMemory(to: type, capacity: 1)
+        bindptr.initialize(to: source[idx])
+         let pty = UnsafeRawPointer(m_ptr)
+        buffer.advanced(by: idx).pointee = pty
+    }
+    return buffer
+}
+</t></source.count></unsaferawpointer?></unsaferawpointer?></t></pre>
+
+<p>调用:<bre></bre></p>
+<pre>
+let keys:[CFString] = [
+            kCGImageSourceCreateThumbnailWithTransform,
+            kCGImageSourceCreateThumbnailFromImageIfAbsent,
+            kCGImageSourceThumbnailMaxPixelSize]
+var keybuffer = buffer(to: CFString.self, source: keys)
+/*
+这之间做你的相关操作
+*/
+keybuffer.deallocate(capacity: keys.count)
+</pre>
+
+<p>到这里我对于swift3指针相关的东西，就告一段落了，文章写的很粗糙，望见谅，明天开始公司要求做持续化集成了，如果你看到这个而且想和我交流的话可以在博客上的微博和我取得联系，因为我是真的不懂博客。。。以后有时间会去学习一下前端相关的东西，练手项目应该就是我这个博客！<br><br>最后还是希望去看看<a href="3">C 语言指针 5 分钟教程</a>。<br><br><br><br>参考文献:<br><br><a href="https://developer.apple.com/library/content/documentation/Swift/Conceptual/BuildingCocoaApps/InteractingWithCAPIs.html" target="_blank" rel="external">Use Swift With Cocoa</a><br><br><a href="https://swift.org/migration-guide/se-0107-migrate.html" target="_blank" rel="external">UnsafeRawPointer Migration Swift.org</a><br><br><a href="http://technology.meronapps.com/2016/09/27/swift-3-0-unsafe-world-2/" target="_blank" rel="external">Swift 3.0 Unsafe World</a><br><br><a href="http://stackoverflow.com/questions/39515173/how-to-use-unsafemutablepointer-in-swift-3" target="_blank" rel="external">StackOverflow Question</a><br><br><a href="https://github.com/apple/swift-evolution/blob/master/proposals/0107-unsaferawpointer.md#memory-model-explanation" target="_blank" rel="external">Binding memory type</a><br><br><a href="https://onevcat.com/2015/01/swift-pointer/" target="_blank" rel="external">Swift 中的指针使用</a>(这个是之前版本的介绍，就参考一下用unsafeBitCast，同时文章中提到的<a href="3">C 语言指针 5 分钟教程</a>)<br><br><a href="https://zh.wikipedia.org/wiki/%E6%8C%87%E6%A8%99_(%E9%9B%BB%E8%85%A6%E7%A7%91%E5%AD%B8" target="_blank" rel="external">指针</a>)</p>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2016/10/25/swift3_UnsafePointer/" class="archive-article-date">
+  	<time datetime="2016-10-25T02:24:33.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-25</time>
+</a>
+      
+      
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2016/10/14/SwiftWidget/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+	    <a class="jiathis_button_twitter"></a>
+	    <a class="jiathis_button_plus"></a> 
+	    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+
+
+
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Will
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: false,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: "/",
+		innerArchive: true
+	}
+</script>
+
+<script src="/./main.js"></script>
+
+
+    
+<div class="tools-col">
+  <ul class="btn-wrap">
+    
+      <li class="chose" data-hook="tools-section-all"><span class="text">全部</span><i class="icon-book"></i></li>
+    
+    
+      <li data-hook="tools-section-tag"><span class="text">标签</span><i class="icon-price-tags"></i></li>
+    
+    
+      <li data-hook="tools-section-friends"><span class="text">友链</span><i class="icon-link"></i></li>
+    
+    
+      <li data-hook="tools-section-me"><span class="text">我</span><i class="icon-smile"></i></li>
+    
+  </ul>
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all chose">
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-tag">
+    			<div class="widget tagcloud" id="js-tagcloud">
+    				
+    			</div>
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-friends">
+  		
+  			<div class="friends-wrap" id="js-friends">
+  			
+  	          <a target="_blank" class="main-nav-link switch-friends-link" href="http://weibo.com/wwloading/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1">友情链接</a>
+  	        
+  	        </div>
+  		
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-me">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">我是一个很菜的技术猿&lt;br&gt;&lt;br&gt;我还需要慢慢的成长&lt;br&gt;希望能来到这里的你，能帮助我更快的成长</div>
+  	  	
+    	</section>
+    
+  </div>
+  
+</div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+  </div>
+</body>
+</html>
