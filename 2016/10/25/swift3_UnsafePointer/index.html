@@ -12,7 +12,7 @@
 <meta property="og:url" content="https://wangwillgood.github.io/2016/10/25/swift3_UnsafePointer/index.html">
 <meta property="og:site_name" content="凌云壮志几多愁">
 <meta property="og:description" content="Swift3 Unsafe[Mutable]Pointer这篇文章水准不高，可能因为我自己能力有限，英文水平也就这样，自己能看懂，可能存在误人子弟的可能性，所以如果有人有机会看到了这边文章就当是一个小白的入门级的笔记吧！如果需要更深入的了解请查看文末的参考链接为了将我的PhotoCutter适配Swfit3一看到一大堆的Unsafe[Mutable]Pointer的错误就是脑壳疼！最头疼的事没有找">
-<meta property="og:updated_time" content="2016-10-26T01:39:15.000Z">
+<meta property="og:updated_time" content="2016-10-26T05:55:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="凌云壮志几多愁">
 <meta name="twitter:description" content="Swift3 Unsafe[Mutable]Pointer这篇文章水准不高，可能因为我自己能力有限，英文水平也就这样，自己能看懂，可能存在误人子弟的可能性，所以如果有人有机会看到了这边文章就当是一个小白的入门级的笔记吧！如果需要更深入的了解请查看文末的参考链接为了将我的PhotoCutter适配Swfit3一看到一大堆的Unsafe[Mutable]Pointer的错误就是脑壳疼！最头疼的事没有找">
@@ -151,12 +151,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Swift3-Unsafe-Mutable-Pointer"><a href="#Swift3-Unsafe-Mutable-Pointer" class="headerlink" title="Swift3 Unsafe[Mutable]Pointer"></a>Swift3 Unsafe[Mutable]Pointer</h1><p>这篇文章水准不高，可能因为我自己能力有限，英文水平也就这样，自己能看懂，可能存在误人子弟的可能性，所以如果有人有机会看到了这边文章就当是一个小白的入门级的笔记吧！如果需要更深入的了解请查看文末的参考链接<br><br>为了将我的PhotoCutter适配Swfit3一看到一大堆的Unsafe[Mutable]Pointer的错误就是脑壳疼！最头疼的事没有找到这方面的中文资料，只有自己来弄了，然后记录一下吧，现在项目还是用OC，一天不写就生疏,怕以后来自己又忘记了，然后自己纪录一下吧…<br><a id="more"></a></p>
-<p>在开始之前需要介绍一下<code>Unsafe[Mutable]Pointer,Unsafe[Mutabl]RawPointer,Unsafe[Mutable]BufferPointer</code>;<br></p>
+        <h1 id="Swift3-Unsafe-Mutable-Pointer"><a href="#Swift3-Unsafe-Mutable-Pointer" class="headerlink" title="Swift3 Unsafe[Mutable]Pointer"></a>Swift3 Unsafe[Mutable]Pointer</h1><p>这篇文章水准不高，可能因为我自己能力有限，英文水平也就这样，自己能看懂，可能存在误人子弟的可能性，所以如果有人有机会看到了这边文章就当是一个小白的入门级的笔记吧！如果需要更深入的了解请查看文末的参考链接<br><br>为了将我的PhotoCutter适配Swfit3一看到一大堆的Unsafe[Mutable]Pointer的错误就是脑壳疼！最头疼的事没有找到这方面的中文资料，只有自己来弄了，然后记录一下，现在项目还是用OC，一天不写就生疏,怕以后来自己又忘记了，然后自己纪录一下吧…</p>
+<a id="more"></a>
 <blockquote>
-<p>1.我的理解:<code>UnsafeMutablePointer</code>其实就是<code>UnsafePointer</code>的可以变化的类型，但是<code>UnsafePointer</code>又不允许你去改变指针元素<br></p>
-<p>2.Unsafe[Mutable]RawPointer:在swift3以前为<code>Unsafe[Mutable]Pointer&lt;Void&gt;</code>,也就是c中的<code>void *</code></p>
-<p>3.Unsafe[Mutable]BufferPointer表示一连串的数组指针</p>
+<p>这里我先粗略地介绍：<br>1.我的理解:<code>UnsafeMutablePointer</code>其实就是<code>UnsafePointer</code>的可以变化的类型，但是<code>UnsafePointer</code>又不允许你去改变指针元素<br></p>
+<p>2.<code>Unsafe[Mutable]RawPointer</code>:在swift3以前为<code>Unsafe[Mutable]Pointer&lt;Void&gt;</code>,也就是c中的<code>void *</code></p>
+<p>3.<code>Unsafe[Mutable]BufferPointer</code>表示一连串的数组指针</p>
 </blockquote>
 <h4 id="withUnsafePointer-withUnsafeMutablePointer"><a href="#withUnsafePointer-withUnsafeMutablePointer" class="headerlink" title="withUnsafePointer/withUnsafeMutablePointer"></a>withUnsafePointer/withUnsafeMutablePointer</h4><p>比如下面我用c的方式创建和销毁了一个<code>int</code>型的指针<code>a</code>:</p>
 <pre>
@@ -166,10 +166,14 @@ free(a)
 </pre>
 假设在swift中`var a:Int = 10`,现在我们的目的是想创建一个指针a,我们需要将`a`转成`*a`，我们需要怎么做呢？这里可以用到`withUnsafePointer/withUnsafeMutablePointer`<br>
 这两个函数会以swift类型和一个block为参数，而这个目的指针就是这个block的参数。也就是说你想将某一个swift类型的参数转换为一个指针result，这个result就是你想获得的指针，也就是下面两个例子中的ptr，希望我这个描述没有把你绕晕！<br>
-这里我也以swift.org上面的socket例子来写吧!
-`var addrin = sockaddr_in()`
-> 创建UnsafeMutablePointer
+这里我也以swift.org上面的socket例子来写吧!<br>
+<pre>
+var addrin = sockaddr_in()
+</pre>
 
+<blockquote>
+<p>创建UnsafeMutablePointer</p>
+</blockquote>
 <pre>
 withUnsafeMutablePointer(to: &addrin) { ptr in
     //ptr:UnsafeMutablePointer\<sockaddr_in>
@@ -271,25 +275,23 @@ let intPtr = rawPtr.assumingMemoryBound(to: Int.self)
 </tr>
 </tbody>
 </table>
-<p>从上面的表格结合文档里面对于<code>bindMemory</code>的说明来看，我对于<code>bindMemory</code>的理解就是，使用函数之前这块内存空间是没有被初始化的，使用<code>bindMemory</code>的目的是将<code>T</code>绑定到<code>self</code>后面<code>self</code> + <code>count</code> * <code>MemoryLayout&lt;T&gt;.stride</code>长度的的这块内存空间上来。但是绑定上来并不代表初始化了，此时这个内存空间仍然是没有初始化的，所以最后需要调用函数<code>initialize</code>的函数来初始化!<br><br>这个函数的使用可能会有问题…先上一段我自己理解的代码吧</p>
+<p>从上面的表格结合文档里面对于<code>bindMemory</code>的说明来看，我对于<code>bindMemory</code>的理解就是，使用函数之前这块内存空间是没有被初始化的，使用<code>bindMemory</code>的目的是将<code>T</code>绑定到<code>self</code>后面<code>self</code> + <code>count</code> <em> <code>MemoryLayout&lt;T&gt;.stride</code>长度的的这块内存空间上来。但是绑定上来并不代表初始化了，此时这个内存空间仍然是没有初始化的，所以最后需要调用函数<code>initialize</code>的函数来初始化!<br><br>用这个函数同样可以把`void </em>`的C类型转换为Swift的类型。关于<a href="2">Custom memory allocation</a><br>这个函数的使用可能会有问题…先上一段我自己理解的代码吧</p>
 <pre>
 let a = 100
 let a_rawptr = UnsafeMutableRawPointer.allocate(bytes: MemoryLayout\<int>.size, alignedTo: MemoryLayout\<int>.alignment)
 let bind_rawptr = a_rawptr.bindMemory(to: Int.self, capacity: MemoryLayout\<int>.stride)
 bind_rawptr.initialize(to: a)
 </int></int></int></pre>
-从这里可以把`void *`的C类型转换为Swift的类型。关于[Custom memory allocation](2)
-
-#### unsafeBitCast ####
-返回一个翻译成某一特定类型的值！,`这个会破坏Swift的类型系统`！
->特别注意⚠️:
->不到万不得已不要使用这个函数
 
 
-#### 实战 ####
-PhotoCutter为了适配Swift3，这其中大部分和指针相关的东西需要适配，我开始看到这些也是懵逼的，根本不懂怎么改，只有自己去慢慢学。我的方法可能很差，就目前而言是适配了，下面贴上我的修改的代码吧!
->Swift2.x
-
+<h4 id="unsafeBitCast"><a href="#unsafeBitCast" class="headerlink" title="unsafeBitCast"></a>unsafeBitCast</h4><p>返回一个翻译成某一特定类型的值！,<code>这个会破坏Swift的类型系统</code>！<br></p>
+<blockquote>
+<p>特别注意⚠️:<br>不到万不得已不要使用这个函数</p>
+</blockquote>
+<h4 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h4><p>PhotoCutter为了适配Swift3，这其中大部分和指针相关的东西需要适配，我开始看到这些也是懵逼的，根本不懂怎么改，只有自己去慢慢学。我的方法可能很差，就目前而言是适配了，下面贴上我的修改的代码吧!</p>
+<blockquote>
+<p>Swift2.x</p>
+</blockquote>
 <pre>
 options = CFDictionaryCreate(kCFAllocatorDefault,
             UnsafeMutablePointer(UnsafePointer<void>(keys)),
@@ -322,13 +324,14 @@ let keys:[CFString] = [
             kCGImageSourceCreateThumbnailFromImageIfAbsent,
             kCGImageSourceThumbnailMaxPixelSize]
 var keybuffer = buffer(to: CFString.self, source: keys)
-/*
+/\*
 这之间做你的相关操作
 */
 keybuffer.deallocate(capacity: keys.count)
 </pre>
 
-<p>到这里我对于swift3指针相关的东西，就告一段落了，文章写的很粗糙，望见谅，明天开始公司要求做持续化集成了，如果你看到这个而且想和我交流的话可以在博客上的微博和我取得联系，因为我是真的不懂博客。。。以后有时间会去学习一下前端相关的东西，练手项目应该就是我这个博客！<br><br>最后还是希望去看看<a href="3">C 语言指针 5 分钟教程</a>。<br><br><br><br>参考文献:<br><br><a href="https://developer.apple.com/library/content/documentation/Swift/Conceptual/BuildingCocoaApps/InteractingWithCAPIs.html" target="_blank" rel="external">Use Swift With Cocoa</a><br><br><a href="https://swift.org/migration-guide/se-0107-migrate.html" target="_blank" rel="external">UnsafeRawPointer Migration Swift.org</a><br><br><a href="http://technology.meronapps.com/2016/09/27/swift-3-0-unsafe-world-2/" target="_blank" rel="external">Swift 3.0 Unsafe World</a><br><br><a href="http://stackoverflow.com/questions/39515173/how-to-use-unsafemutablepointer-in-swift-3" target="_blank" rel="external">StackOverflow Question</a><br><br><a href="https://github.com/apple/swift-evolution/blob/master/proposals/0107-unsaferawpointer.md#memory-model-explanation" target="_blank" rel="external">Binding memory type</a><br><br><a href="https://onevcat.com/2015/01/swift-pointer/" target="_blank" rel="external">Swift 中的指针使用</a>(这个是之前版本的介绍，就参考一下用unsafeBitCast，同时文章中提到的<a href="3">C 语言指针 5 分钟教程</a>)<br><br><a href="https://zh.wikipedia.org/wiki/%E6%8C%87%E6%A8%99_(%E9%9B%BB%E8%85%A6%E7%A7%91%E5%AD%B8" target="_blank" rel="external">指针</a>)</p>
+<p>到这里我对于swift3指针相关的东西，就告一段落了，文章写的很粗糙，望见谅，明天开始公司要求做持续化集成了，如果你看到这个而且想和我交流的话可以在博客上的微博和我取得联系，因为我是真的不懂博客。。。以后有时间会去学习一下前端相关的东西，练手项目应该就是我这个博客！<br><br>最后还是希望去看看<a href="3">C 语言指针 5 分钟教程</a>。<br><br><br></p>
+<p>参考文献:<br><br><a href="https://developer.apple.com/library/content/documentation/Swift/Conceptual/BuildingCocoaApps/InteractingWithCAPIs.html" target="_blank" rel="external">Use Swift With Cocoa</a><br><br><a href="https://swift.org/migration-guide/se-0107-migrate.html" target="_blank" rel="external">UnsafeRawPointer Migration Swift.org</a><br><br><a href="http://technology.meronapps.com/2016/09/27/swift-3-0-unsafe-world-2/" target="_blank" rel="external">Swift 3.0 Unsafe World</a><br><br><a href="http://stackoverflow.com/questions/39515173/how-to-use-unsafemutablepointer-in-swift-3" target="_blank" rel="external">StackOverflow Question</a><br><br><a href="https://github.com/apple/swift-evolution/blob/master/proposals/0107-unsaferawpointer.md#memory-model-explanation" target="_blank" rel="external">Binding memory type</a><br><br><a href="https://onevcat.com/2015/01/swift-pointer/" target="_blank" rel="external">Swift 中的指针使用</a>(这个是之前版本的介绍，就参考一下用unsafeBitCast，同时文章中提到的<a href="3">C 语言指针 5 分钟教程</a>)<br><br><a href="https://zh.wikipedia.org/wiki/%E6%8C%87%E6%A8%99_(%E9%9B%BB%E8%85%A6%E7%A7%91%E5%AD%B8" target="_blank" rel="external">指针</a>)</p>
 
       
     </div>
