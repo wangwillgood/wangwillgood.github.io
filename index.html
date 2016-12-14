@@ -150,95 +150,10 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>#iOS中使用Jenkins进行持续集成以及自己动手开发插件(无Java开发经验)</p>
-<p>##一.进行持续集成的文章网上很多<br>后面再来补充，先做后面的</p>
-<p>##二、自己动手开发Jenkins插件<br>首先声明由于本人是个菜鸟，之前根本不会Java相关的开发，所以在我看来是很值得注意的地方可能在很多人眼里是一个鸡毛蒜皮的小事，那也就当复习看一下吧。<br>所有开发的开始还是去看<a href="https://wiki.jenkins-ci.org/display/JENKINS/Plugin+tutorial" target="_blank" rel="external">官方文档</a>，最权威也应该是最及时的。<br>如果和我一样没有什么Java的基础的话，我建议去<a href="http://www.runoob.com/java/java-array.html" target="_blank" rel="external">w3cScholl</a>去学习一下基础的语法知识</p>
-<p>####1.开发插件的初衷<br>因为Jenkins里面有很多插件，也有一个Xcode插件，可能作者是为了照顾大多数人的需求以至于做的很通用，但是我觉得这个配置对于一个新手来说并不十分友好，如果之前有用过xcodebuild脚本的打包的可能会好很多。我想尽可能简化插件的配置过程，所以就有了让我开发一个Jenkins插件的初衷。</p>
-<p>####2.插件的形式</p>
-<blockquote>
-<p>1）、插件支持多种版本的打包；<br>2）、插件减少配置的过程；</p>
-</blockquote>
-<p>现在插件的雏形是:<br><img src="./屏幕快照 2016-11-08 上午10.06.31.png" alt="Alt text"><br>另外的文件:</p>
-<blockquote>
-<p>1）、需要一个配置相关的xml文件，放在xml文件中，而不是放在插件中的目的是为了能够记住相关的操作，使用xml而不是使用plist是为了平台通用的配置（尽管plist也是一个xml文件，但是我没有尝试过将它放在一个windows电脑上能不能正常的识别）<br><del>因为无意中在<code>libexec</code>中找到了<code>PlistBuddy</code>这个工具，所以还是使用plist来代替xml文件吧，因为对于iOS开发者来说plist的地位太大了。</del><br>2）、一个打包相关的plist文件</p>
-</blockquote>
-<p>####3.插件开发所需要的准备</p>
-<blockquote>
-<p>1）、需要下载一个jdk包<br>2）、需要maven的环境<br>3）、一个开发的ide，我是用的idea，虽然是个收费软件，但是有30天的免费使用时间，开始准备用eclipse的，但是经过网上所谓的方法配置了之后，那个代码联想功能和xcode的差距不是一点儿半点儿。没办法只有果断弃之。</p>
-</blockquote>
-<p>####4.插件开发工具IDEA的配置<br>跟着前面说的官方文档来做基本就能正常的走通，这里我说一下作为一个java相关的菜鸟(虽然在ios也是菜鸟，不要在意)中遇到的相关的坑吧！<br><br> 上面所说的下载jdk需要去官网下载，而maven可以通过homebrew来下载，下载也就不需要网上说的那些的路径配置了。<br><br> 在官方文档中有说要设置<code>setting.xml</code>文件中相关的东西，通过homebrew来下载的maven的setting.xml文件的地址是<code>/usr/local/Cellar/maven/3.3.9/libexec/conf</code><br><br>你如果跟着上面的教程做的话，到了<code>Plugin Workspace Layout</code>的话，先不要急着向下走了，他后面介绍的相关东西文件之类的在idea里面能够很清晰的看到这些文件层次。所以这里需要先配置一下idea了。</p>
-<blockquote>
-<p>1）、第一步你需要生成一个idea的工程，就像是iOS中的一个xcode project的工程。通过使用maven的命令<code>mvn idea:idea</code>生成一个idea的文件。<br>2）、java包相关的东西，网上有很多<br>3）、安装Jenkins Plugin的调试环境，<code>Run -&gt; Debug -&gt; Edit Configuration -&gt; + -&gt; Remote -&gt; 输入一个Debug名称，并修改端口为8000 -&gt; Apply -&gt; Debug</code>  装Jenkins然后点击左下角有个绿色的昆虫样式的就可以开始调试，如果能够输出<code>Connected to the target VM, address: &#39;localhost:8000&#39;, transport: ‘socket&#39;</code>的log就说明已经成功创建了debug了。具体Debug相关的需要查看Debugging a Plugin一节其中Unix的设置中有一句命令<code>export MAVEN_OPTS=&quot;-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=n&quot;</code>，这句命令设置maven options的相关，这就是为什么在idea中debug的时候需要讲端口号设置为8000，我猜测可以通过maven options设置为其他端口，具体行不行后面再说吧！<br>如果你在debug的时候开了一个localhost的话，最好是先把之前的localhost取消掉<code>ctrl + c</code><br>    用命令执行<code>man hpi:run jenkins</code>环境。</p>
-</blockquote>
-<p>####5.插件的具体开发<br>当前工程的目录情况<br><img src="./屏幕快照 2016-11-08 上午10.44.48.png" alt="Alt text"><br>在resources文件夹的下面有两个文件<code>global.jelly</code>和<code>config.jelly</code>，其中<code>config.jelly</code>就是我们需要在插件上需要配置的东西<br><code>global.jelly</code><br><code>config.jelly</code>用于配置插件ui相关和<code>HelloWorldBuilder</code>文件的数据传递作用，我设置的<code>config.jelly</code>为:<br><br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&lt;?jelly escape-by-default='true'?&gt;</div><div class="line"><span class="tag">&lt;<span class="name">j:jelly</span> <span class="attr">xmlns:j</span>=<span class="string">"jelly:core"</span> <span class="attr">xmlns:st</span>=<span class="string">"jelly:stapler"</span> <span class="attr">xmlns:d</span>=<span class="string">"jelly:define"</span> <span class="attr">xmlns:l</span>=<span class="string">"/lib/layout"</span> <span class="attr">xmlns:t</span>=<span class="string">"/lib/hudson"</span> <span class="attr">xmlns:f</span>=<span class="string">"/lib/form"</span>&gt;</span></div><div class="line">  <span class="comment">&lt;!-- This jelly script is used for per-project configuration.See global.jelly for a general discussion about jelly script.</span></div><div class="line">  --&gt;</div><div class="line"></div><div class="line">  <span class="comment">&lt;!--</span></div><div class="line">    Creates a text field that shows the value of the "name" property.</div><div class="line">    When submitted, it will be passed to the corresponding constructor parameter.</div><div class="line">  --&gt;</div><div class="line">  <span class="tag">&lt;<span class="name">f:entry</span> <span class="attr">title</span>=<span class="string">"Name"</span> <span class="attr">field</span>=<span class="string">"name"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">f:textbox</span> /&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">f:entry</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">f:entry</span> <span class="attr">title</span>=<span class="string">"$&#123;%Build Debug Version?&#125;"</span> <span class="attr">field</span>=<span class="string">"haveDebugVersion"</span></span></div><div class="line">           <span class="attr">description</span>=<span class="string">"Debug Version"</span> <span class="attr">help</span>=<span class="string">"this will build a debug ipa"</span>&gt;</div><div class="line">    <span class="tag">&lt;<span class="name">f:checkbox</span> <span class="attr">title</span>=<span class="string">"YES"</span> /&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">f:entry</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">f:entry</span> <span class="attr">title</span>=<span class="string">"$&#123;%Build Release Version?&#125;"</span> <span class="attr">field</span>=<span class="string">"haveReleaseVersion"</span></span></div><div class="line">           <span class="attr">description</span>=<span class="string">"Release Version"</span> <span class="attr">help</span>=<span class="string">"this will build a release ipa"</span>&gt;</div><div class="line">    <span class="tag">&lt;<span class="name">f:checkbox</span> <span class="attr">title</span>=<span class="string">"YES"</span> /&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">f:entry</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">j:jelly</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<p>#####HelloWorldBuilder文件相关解释</p>
-<p>######<code>HelloWorldBuilder</code><br><code>HelloWorldBuilder</code>类的初始化方法</p>
-<pre>
-public HelloWorldBuilder(String name,Boolean haveDebugVersion,Boolean haveReleaseVersion) {
-        this.name = name;
-        this.haveDebugVersion = haveDebugVersion;
-        this.haveReleaseVersion = haveReleaseVersion;
-        System.out.println(this.haveDebugVersion);
-        System.out.println(this.haveReleaseVersion);
-}
-</pre>
-初始化方法只会在你更新插件设置的时候才会运行一次！
-######`getProperty` 
-这里的property就是属性名称，相当于oc里面的get方法吧，比如工程自带的<br>
-<pre>
-public String getName() {
-   return name;
-}
-</pre>
-我自己也添加了两个属性，分别名为`haveDebugVersion`，`haveReleaseVersion`。所以需要写一个这两个Property的get方法
-<pre>
-public boolean getHaveDebugVersion() { return haveDebugVersion;}
-public boolean getHaveReleaseVersion() { return haveReleaseVersion;}
-</pre>
-通过这个`get`方法就可以获取来自插件配置页面的数据了。
-######`perform` 
-当你的jenkins job在构建的时候会运行这个方法。在构建的一次job中的`Console Ouput`中可以看到你自己相关的log。
-该方法会在每次构建一个job的时候运行一次，这和builder的初始化方法不一样！
-######`DescriptorImpl`类
-插件属性配置相关
-######`getDisplayName`
-配置当前插件的名称。比如我这里return的是`Easy Builder`;
-
-####6.插件开发过程中的相关笔记
-#####自定义创建步骤
-下面这所有的操作我都是在idea中完成的。
-######1.创建一个类
-这个类文件创建在`scr/main/jave/文件夹(groupId.artifactId)`比如我的路径是:`scr/main/jave/plugin.jenkinsplugintest)`。
-<pre>
-public class XcodeBuilder extends Builder {
-    (...)
-}
-</pre>
-#####2.为这个类创建一个视图
-同上，如果你要为`XcodeBuilder`创建一个视图的话，就需要在`scr/main/resources`下面创建一个package，创建好了package之后，然后在这个package下面创建一个`config.jelly`，关于这个文件相关的东西我在[前面](####插件的具体开发####)有提到过，还可以创建一个`help`文件，用来配置某一个属性的帮助信息，这个帮助信息在Jenkins中配置时可以看到。
-
-#####Java中创建多线程的方式
-[Java多线程编程](http://www.runoob.com/java/java-multithreading.html)这是我看w3cScholl中的方法，如果用教程的方式来创建一个类并遵守`Runaable`协议，这样写的弊端就需要每一个线程的逻辑都在`run`函数中去写，感觉代码就很不友好，经过请教别人之后，发现了一个新的办法，特意在这里来记录一下:
-<pre>
-//创建多线程并执行相关操作
- Thread t = new Thread(new Runnable() {
-                @Override
-                public void run() {
-
-                   }
-                });
-String thread_name = String.format("com.thread_id_%d.easy_builder",i);
-t.setName(thread_name);
-t.start();
-</pre>
-
-<p>#####markdown中添加删除线的方式<br><del>这是一段需要添加删除线的句子</del><br>具体的语法为:</p>
-<pre>
-~~这是一段需要添加删除线的句子~~
-</pre>
-
-
-<p>####相关链接<br><a href="https://wiki.jenkins-ci.org/display/JENKINS/Create+a+new+Plugin+with+a+custom+build+Step" target="_blank" rel="external">Create a new Plugin with a custom build Step</a></p>
-
+<p>首先声明由于本人是个菜鸟，之前根本不会Java相关的开发，所以在我看来是很值得注意的地方可能在很多人眼里是一个鸡毛蒜皮的小事，那也就当复习看一下吧。<br>所有开发的开始还是去看<a href="https://wiki.jenkins-ci.org/display/JENKINS/Plugin+tutorial">官方文档</a>，最权威也应该是最及时的。<br>如果和我一样没有什么Java的基础的话，我建议去<a href="http://www.runoob.com/java/java-array.html">w3cScholl</a>去学习一下基础的语法知识<br>
+        <p class="article-more-link">
+          <a class="article-more-a"  href="/2016/11/09/jenkins_plugin/#more">more >></a>
+        </p>
       
     </div>
     <div class="article-info article-info-index">
